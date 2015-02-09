@@ -13,7 +13,7 @@
 
 STARTED_AT=$(date +%s)
 
-TOPDIR=$(readlink -f $PWD)
+TOPDIR=$(readlink -f $(dirname $0))
 
 function fatal()
 {
@@ -92,6 +92,12 @@ echoblue "REMOVE_UNUSED_BSP: $REMOVE_UNUSED_BSP"
 
 [ -z "$CPU" ] && usage
 [ -z "$BSP" ] && usage
+
+#
+# Entire process assumes that the script directory is the current directory.
+#
+echo "Working directory: $TOPDIR"
+cd $TOPDIR || fatal "Can't cd to working directory"
 
 #
 # Initializing the submodules
