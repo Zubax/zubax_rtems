@@ -1,0 +1,6 @@
+[submodule "rtems"]
+	path = rtems
+	url = https://github.com/RTEMS/rtems
+[submodule "rtems-source-builder"]
+	path = rtems-source-builder
+	url = https://github.com/RTEMS/rtems-source-builder

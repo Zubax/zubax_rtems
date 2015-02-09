@@ -1,0 +1,10 @@
+# Build outputs
+toolchain/*
+rtems-build/*
+bsps/*
+
+# Generated items
+env.sh
+
+# Temporary items
+*.log
