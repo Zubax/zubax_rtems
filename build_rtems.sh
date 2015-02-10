@@ -118,10 +118,21 @@ fi
 #
 TOOLCHAIN_DIR=$TOPDIR/toolchain
 
+function does_toolchain_exist()
+{
+    ls $TOOLCHAIN_DIR/bin/*gcc > /dev/null
+}
+
+if [[ $BUILD_TOOLCHAIN == 0 ]]; then
+    if ! does_toolchain_exist; then
+        echoblue "Toolchain not found, forcing rebuild"
+        BUILD_TOOLCHAIN=1
+    fi
+fi
+
 if [[ $BUILD_TOOLCHAIN != 0 ]]; then
     # Protection against accidental rebuild
-    ls $TOOLCHAIN_DIR/bin/*gcc > /dev/null && \
-        fatal "Toolchain appears to be built already. To rebuild, remove $TOOLCHAIN_DIR"
+    does_toolchain_exist && fatal "Toolchain appears to be built already. To rebuild, remove $TOOLCHAIN_DIR"
 
     echoblue "Building the toolchain..."
     rm -rf $TOOLCHAIN_DIR &> /dev/null
@@ -176,7 +187,7 @@ if [[ $BUILD_TOOLCHAIN != 0 ]]; then
     echogreen "RTEMS SB succeeded"
 fi
 
-ls $TOOLCHAIN_DIR > /dev/null || fatal "Toolchain not found. Use --build-toolchain to build it."
+does_toolchain_exist || fatal "Toolchain not found"
 
 #
 # Environment configuration file

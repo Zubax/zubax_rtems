@@ -14,8 +14,7 @@ export STM32F4_ENABLE_I2C1=""
 
 ./build_rtems.sh --cpu=arm           \
                  --bsp=stm32f105rc   \
-                 --remove-unused-bsp \
-                 --build-toolchain
+                 --remove-unused-bsp
 ```
 
 Scratch build requires Internet connection and takes around 40 minutes to complete.
