@@ -54,7 +54,6 @@ CPU=
 BSP=
 OVERWRITE_BSP_DIR=
 AMEND_BSP_DIR=
-BUILD_TOOLCHAIN=0
 REMOVE_UNUSED_BSP=0
 
 for i in "$@"; do
@@ -70,9 +69,6 @@ for i in "$@"; do
             ;;
         --amend-bsp-dir=*)
             AMEND_BSP_DIR="${i#*=}"
-            ;;
-        --build-toolchain)
-            BUILD_TOOLCHAIN=1
             ;;
         --remove-unused-bsp)
             REMOVE_UNUSED_BSP=1
@@ -123,18 +119,8 @@ function does_toolchain_exist()
     ls $TOOLCHAIN_DIR/bin/*gcc > /dev/null
 }
 
-if [[ $BUILD_TOOLCHAIN == 0 ]]; then
-    if ! does_toolchain_exist; then
-        echoblue "Toolchain not found, forcing rebuild"
-        BUILD_TOOLCHAIN=1
-    fi
-fi
-
-if [[ $BUILD_TOOLCHAIN != 0 ]]; then
-    # Protection against accidental rebuild
-    does_toolchain_exist && fatal "Toolchain appears to be built already. To rebuild, remove $TOOLCHAIN_DIR"
-
-    echoblue "Building the toolchain..."
+if ! does_toolchain_exist; then
+    echoblue "Toolchain not found, forcing rebuild"
     rm -rf $TOOLCHAIN_DIR &> /dev/null
 
     #
@@ -185,6 +171,8 @@ if [[ $BUILD_TOOLCHAIN != 0 ]]; then
         || fatal "RSB build failed"
 
     echogreen "RTEMS SB succeeded"
+else
+    echoblue "Toolchain appears to be built. To rebuild, remove $TOOLCHAIN_DIR"
 fi
 
 does_toolchain_exist || fatal "Toolchain not found"
