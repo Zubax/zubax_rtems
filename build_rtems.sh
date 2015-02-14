@@ -196,10 +196,6 @@ export PATH=$TOOLCHAIN_DIR/bin:\$PATH
 
 # Needed for applications
 export RTEMS_MAKEFILE_PATH=$TOPDIR/bsps/$CPU-rtems4.11/\$RTEMS_BSP
-
-# Convenience defines (not required)
-export RTEMS_TOOLCHAIN_BASE=$TOOLCHAIN_DIR
-export RTEMS_BSP_BASE=$TOPDIR/bsps
 EOF
 
 chmod 444 $ENV_FILE   # Protection against accidental changes
