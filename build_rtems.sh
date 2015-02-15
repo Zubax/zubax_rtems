@@ -183,6 +183,7 @@ does_toolchain_exist || fatal "Toolchain not found"
 echoblue "Generating the environment configuration file..."
 cd $TOPDIR
 ENV_FILE=env.sh
+rm -f $ENV_FILE         # It's write protected, so explicit rm is needed
 cat << EOF > $ENV_FILE
 #
 # This file must be sourced in order for the build system to work.
@@ -292,18 +293,22 @@ cd $TOPDIR/rtems || fatal "Can't cd to rtems"
 ./bootstrap || fatal "Failed to bootstrap"
 
 echoblue "Configuring..."
+echo "Extra options: $RTEMS_CONFIGURE_EXTRA_OPTIONS"
 cd $TOPDIR
 rm -rf rtems-build &> /dev/null
 rm -rf $TOPDIR/bsps &> /dev/null
 mkdir rtems-build
 cd rtems-build || fatal "Can't cd to rtems-build"
 
+set -vx
 ../rtems/configure --target=$CPU-rtems4.11      \
+                   --prefix=$TOPDIR/bsps        \
                    --enable-tests=samples       \
                    --enable-rtemsbsp=$BSP       \
                    --enable-posix               \
                    --enable-languages=c,c++     \
-                   --prefix=$TOPDIR/bsps
+                   $RTEMS_CONFIGURE_EXTRA_OPTIONS
+set +vx
 
 build_status=$?
 if [[ $build_status != 0 ]]; then
