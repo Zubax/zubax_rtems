@@ -18,3 +18,16 @@ export STM32F4_ENABLE_I2C1=""
 ```
 
 Scratch build requires Internet connection and takes around 40 minutes to complete.
+
+## Using the Eclipse Plugin
+
+The eclipse plugin can be installed as described here: <https://devel.rtems.org/wiki/Developer/Eclipse/Plugin>.
+
+When the plugin is installed, create a new project with RTEMS toolchain, then configure the RTEMS installation path in
+the project properties window on the page **Properties** → **C/C++ Build** → **RTEMS**. For example, RTEMS installation
+path for ARM architecture should be configured as follows:
+
+- Base path: `zubax_rtems/rtems-build`
+- BSP path: `zubax_rtems/bsps/arm-rtems4.11`
+
+Note that these directories will be created when RTEMS is built.
