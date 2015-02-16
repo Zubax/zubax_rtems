@@ -21,17 +21,53 @@ Scratch build requires Internet connection and takes around 40 minutes to comple
 
 ## Eclipse configuration
 
+### RTEMS Eclipse plugin
+
 The Eclipse plugin can be installed as described here: <https://devel.rtems.org/wiki/Developer/Eclipse/Plugin>.
 
-When the plugin is installed, create a new project with RTEMS toolchain, then configure the RTEMS installation path in
-the project properties window on the page **Properties** → **C/C++ Build** → **RTEMS**. For example, RTEMS installation
-path for ARM architecture should be configured as follows:
+When the plugin is installed, create a new project with RTEMS toolchain, then configure the RTEMS installation path on
+the RTEMS properties page at **Project** → **Properties** → **C/C++ Build** → **RTEMS**. For example, RTEMS
+installation path for ARM architecture should be configured as follows:
 
 - Base path: `zubax_rtems/rtems-build`
 - BSP path: `zubax_rtems/bsps/arm-rtems4.11`
 
 Note that these directories will be created when RTEMS is built.
 
-If a `make` wrapper script is used, the default build command needs to be overriden. Go to **Properties** → **C/C++ Build**,
-untick **Use default build command**, and set the field **Build command** to `bash make.sh` (assuming that the wrapper script
-is named `make.sh`).
+### Build settings
+
+If a `make` wrapper script is used, the default build command needs to be overriden. Go to **Project** → **Properties**
+→ **C/C++ Build**, untick **Use default build command**, and set the field **Build command** to `bash make.sh`
+(assuming that the wrapper script is named `make.sh`).
+
+### GDB debugging
+
+#### ARM - Black Magic Probe
+
+These instructions are valid for ARM architecture and [Black Magic Probe](http://www.blacksphere.co.nz/main/blackmagic)
+as a debugger.
+
+- Go **Window** → **Preferences** → **Run/Debug** → **Launching** → **Default Launchers**:
+  - Select `GDB Hardware Debugging` → `[Debug]`, then tick *only* `Legacy GDB Hardware Debugging Launcher`, and make
+  sure that the option for GDB (DSF) is disabled.
+- Go **Run** → **Debug Configurations**:
+  - Invoke the context menu for `GDB Hardware Debugging`, select New.
+  - Tab `Debugger`:
+    - Set the field `GDB Command` to the absolute path to your GDB executable `arm-rtems4.11-gdb`. To find out the
+    absolute path, source the file `env.sh` and execute `which arm-rtems4.11-gdb`.
+    - Untick `Use remote target`.
+  - Tab `Startup`:
+    - If a boot loader is used, make sure that `Image offset` is configured correctly.
+    - Enter the following in the field `Initialization commands`:
+
+```gdb
+target extended <BLACK_MAGIC_SERIAL_PORT>
+
+monitor swdp_scan   # Use jtag_scan instead if necessary
+attach 1
+monitor vector_catch disable hard
+
+set mem inaccessible-by-default off
+monitor option erase
+set print pretty
+```
