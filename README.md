@@ -62,9 +62,9 @@ as a debugger.
     - Enter the following in the field `Initialization commands`:
 
 ```gdb
-target extended <BLACK_MAGIC_SERIAL_PORT>
+target extended /dev/ttyACM0      # Update the serial port name according to your setup
 
-monitor swdp_scan   # Use jtag_scan instead if necessary
+monitor swdp_scan                 # Use jtag_scan instead if necessary
 attach 1
 monitor vector_catch disable hard
 
