@@ -33,9 +33,11 @@ endif
 # Common compiler flags
 # Application specific flags are appended so the default flags can be overriden
 #
-common_flags = -Wall -Wextra -Werror -Wundef -pedantic
+common_flags = -Wall -Wextra -Werror -Wundef -pedantic -ffunction-sections -fdata-sections
 AM_CFLAGS := $(common_flags) -std=c99 $(AM_CFLAGS)
 AM_CXXFLAGS := $(common_flags) -std=c++11 -fno-exceptions -fno-rtti $(AM_CXXFLAGS)
+
+AM_LDFLAGS := -Wl,--gc-sections $(AM_LDFLAGS)
 
 #
 # RTEMS makefiles
