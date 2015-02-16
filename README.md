@@ -23,16 +23,17 @@ Scratch build requires Internet connection and takes around 40 minutes to comple
 
 ### RTEMS Eclipse plugin
 
-The Eclipse plugin can be installed as described here: <https://devel.rtems.org/wiki/Developer/Eclipse/Plugin>.
+The Eclipse plugin can be installed as
+[described on the RTEMS wiki](https://devel.rtems.org/wiki/Developer/Eclipse/Plugin). When the plugin is installed,
+create a new project with RTEMS toolchain, then configure the RTEMS installation path on the RTEMS properties page at
+**Project** → **Properties** → **C/C++ Build** → **RTEMS**. For example, RTEMS installation path for architecture `ARM`
+and BSP `stm32f105rc` should be configured as follows:
 
-When the plugin is installed, create a new project with RTEMS toolchain, then configure the RTEMS installation path on
-the RTEMS properties page at **Project** → **Properties** → **C/C++ Build** → **RTEMS**. For example, RTEMS
-installation path for ARM architecture should be configured as follows:
+- Base path: `zubax_rtems/bsps`
+- BSP path: `zubax_rtems/bsps/arm-rtems4.11/stm32f105rc`
 
-- Base path: `zubax_rtems/rtems-build`
-- BSP path: `zubax_rtems/bsps/arm-rtems4.11`
-
-Note that these directories will be created when RTEMS is built.
+Note that these directories will be created when RTEMS is built. The example above shows relative pathes, but it is
+preferred to use absolute pathes instead.
 
 ### Build settings
 
