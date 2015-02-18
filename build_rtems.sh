@@ -32,6 +32,14 @@ function echogreen()
     tput sgr0
 }
 
+function echoyellow()
+{
+    tput setaf 3
+    tput bold
+    echo "$@"
+    tput sgr0
+}
+
 function echoblue()
 {
     tput setaf 4
@@ -75,6 +83,7 @@ for i in "$@"; do
             REMOVE_UNUSED_BSP=1
             ;;
         --optimize-for-size)
+            echoyellow "Warning: Size optimization may cause the firmware to crash"
             OPTIMIZE_FOR_SIZE=1
             ;;
         *)
