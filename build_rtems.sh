@@ -105,12 +105,11 @@ cd $TOPDIR || fatal "Can't cd to working directory"
 # Initializing the submodules
 #
 git submodule update --init --recursive || fatal "Can't update submodules"
+git submodule foreach --recursive git reset --hard || fatal "Can't reset submodules"
 
 if [[ $OPTIMIZE_FOR_SIZE != 0 ]]; then
     echoblue "Applying patches for size optimization..."
     cd $TOPDIR/rtems-source-builder
-    git status
-    git reset --hard HEAD
     git apply -v $TOPDIR/patches/rsb-target-optspace.patch || fatal "Couldn't apply patch"
 fi
 
