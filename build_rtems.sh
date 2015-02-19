@@ -179,9 +179,10 @@ if ! does_toolchain_exist; then
                                      --list-bsets       \
         || fatal "Can't list build sets"
 
-    ../source-builder/sb-set-builder --log=$SB_LOG_FILE      \
-                                     --prefix=$TOOLCHAIN_DIR \
-                                     4.11/rtems-$CPU         \
+    ../source-builder/sb-set-builder --log=$SB_LOG_FILE                 \
+                                     --prefix=$TOOLCHAIN_DIR            \
+                                     --macros=$TOPDIR/rsb_macros.mc     \
+                                     4.11/rtems-$CPU                    \
         || fatal "RSB build failed"
 
     echogreen "RTEMS SB succeeded"
