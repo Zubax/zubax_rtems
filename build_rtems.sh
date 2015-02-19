@@ -94,6 +94,7 @@ echoblue "OVERWRITE_BSP_DIR:             $OVERWRITE_BSP_DIR"
 echoblue "AMEND_BSP_DIR:                 $AMEND_BSP_DIR"
 echoblue "REMOVE_UNUSED_BSP:             $REMOVE_UNUSED_BSP"
 echoblue "RTEMS_CONFIGURE_EXTRA_OPTIONS: $RTEMS_CONFIGURE_EXTRA_OPTIONS"
+echoblue "RTEMS_RSB_EXTRA_OPTIONS:       $RTEMS_RSB_EXTRA_OPTIONS"
 
 [ -z "$CPU" ] && usage
 [ -z "$BSP" ] && usage
@@ -179,11 +180,14 @@ if ! does_toolchain_exist; then
                                      --list-bsets       \
         || fatal "Can't list build sets"
 
+    set -vx
     ../source-builder/sb-set-builder --log=$SB_LOG_FILE                 \
                                      --prefix=$TOOLCHAIN_DIR            \
                                      --macros=$TOPDIR/rsb_macros.mc     \
+                                     $RTEMS_RSB_EXTRA_OPTIONS           \
                                      4.11/rtems-$CPU                    \
         || fatal "RSB build failed"
+    set +vx
 
     echogreen "RTEMS SB succeeded"
 else
