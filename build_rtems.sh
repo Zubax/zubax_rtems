@@ -63,7 +63,6 @@ BSP=
 OVERWRITE_BSP_DIR=
 AMEND_BSP_DIR=
 REMOVE_UNUSED_BSP=0
-OPTIMIZE_FOR_SIZE=0
 
 for i in "$@"; do
     case $i in
@@ -82,10 +81,6 @@ for i in "$@"; do
         --remove-unused-bsp)
             REMOVE_UNUSED_BSP=1
             ;;
-        --optimize-for-size)
-            echoyellow "Warning: Size optimization may cause the firmware to crash"
-            OPTIMIZE_FOR_SIZE=1
-            ;;
         *)
             usage
             ;;
@@ -98,7 +93,6 @@ echoblue "BSP:                           $BSP"
 echoblue "OVERWRITE_BSP_DIR:             $OVERWRITE_BSP_DIR"
 echoblue "AMEND_BSP_DIR:                 $AMEND_BSP_DIR"
 echoblue "REMOVE_UNUSED_BSP:             $REMOVE_UNUSED_BSP"
-echoblue "OPTIMIZE_FOR_SIZE:             $OPTIMIZE_FOR_SIZE"
 echoblue "RTEMS_CONFIGURE_EXTRA_OPTIONS: $RTEMS_CONFIGURE_EXTRA_OPTIONS"
 
 [ -z "$CPU" ] && usage
@@ -114,13 +108,6 @@ cd $TOPDIR || fatal "Can't cd to working directory"
 # Initializing the submodules
 #
 git submodule update --init --recursive || fatal "Can't update submodules"
-git submodule foreach --recursive git reset --hard || fatal "Can't reset submodules"
-
-if [[ $OPTIMIZE_FOR_SIZE != 0 ]]; then
-    echoblue "Applying patches for size optimization..."
-    cd $TOPDIR/rtems-source-builder
-    git apply -v $TOPDIR/patches/rsb-target-optspace.patch || fatal "Couldn't apply patch"
-fi
 
 cd $TOPDIR
 
